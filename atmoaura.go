@@ -31,33 +31,29 @@ func (a *Atmoaura) WithHost(h string) {
 	a.Host = h
 }
 
+func  (a *Atmoaura) GetCurrentIndex(insee string) (*CurrentData, error) {
+	return getCurrent(a.Host,a.Token, insee, "indices")
+}
 
-func  (a *Atmoaura) GetCurrentIndex(insee string) (*CurrentIndex, error) {
+func  (a *Atmoaura) GetCurrentVigilance(insee string) (*CurrentData, error) {
+	return getCurrent(a.Host,a.Token, insee, "vigilances")
+}
+ 
+
+
+func getCurrent(host string, token string, insee string, dataType string) (*CurrentData, error) {
 
 	var (
-		result CurrentIndex
-		uri  = fmt.Sprintf("%s/communes/%s/indices?api_token=%s&date=now", a.Host, insee, a.Token)
+		result CurrentData
+		uri  = fmt.Sprintf("%s/communes/%s/%s?api_token=%s&date=now", host, insee,dataType, token)
 	)
 
-	err := a.makeRequest(uri, &result)
+	err := makeRequest(uri, &result)
 	return &result, err
 }
 
-func  (a *Atmoaura) GetCurrentVigilance(insee string) (*CurrentVigilance, error) {
+func makeRequest(uri string, dest interface{}) error {
 
-	var (
-		result CurrentVigilance
-		uri  = fmt.Sprintf("%s/communes/%s/vigilances?api_token=%s&date=now", a.Host, insee, a.Token)
-	)
-
-	err := a.makeRequest(uri, &result)
-	return &result, err
-}
-
-
-func (a *Atmoaura) makeRequest(uri string, dest interface{}) error {
-
-	fmt.Println(uri)
 
 	req, err := http.NewRequest(http.MethodGet, uri, nil)
 	if err != nil {

@@ -1,12 +1,13 @@
 package atmoaura
 
-
-type CurrentIndex struct {
+type CurrentData struct {
 	City string `json:"commune"`
 	Insee string `json:"code_insee"`
-	Index Index `json:"indices"`
+	Index Index `json:"indices,omitempty"`
+	Vigilance Vigilance `json:"vigilances,omitempty"`
 }
 
+ 
 type Index struct {
 	Color string `json:"couleur_html"`
 	Value string `json:"valeur"`
@@ -14,12 +15,7 @@ type Index struct {
 	State string `json:"type_valeur"`	
 	Qualifier string `json:"qualificatif"`
 }
-
-type CurrentVigilance struct {
-	City string `json:"commune"`
-	Insee string `json:"code_insee"`
-	Vigilance Vigilance `json:"vigilances"`
-}
+ 
 
 type Vigilance struct {
 	StartAt string `json:"date_debut"`
